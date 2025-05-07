@@ -24,4 +24,13 @@ public class ReaderController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/v2")
+    public ResponseEntity<String> readV2(@RequestParam String key) {
+        String response = messageProducer.sendAndReceive("read_queue_1", key);
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
