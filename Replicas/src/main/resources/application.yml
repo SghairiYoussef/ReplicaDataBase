@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+replica:
+  id: ${REPLICA_ID}
+  file:
+    path: ./data/replica${REPLICA_ID}/data.txt
+  read:
+    queue: read_queue_${REPLICA_ID}
+  write:
+    queue: write_queue_${REPLICA_ID}
