@@ -15,7 +15,7 @@ services:
     build:
       context: ./Replicas
     volumes:
-      - ./data/replica1:/app/data
+      - ./data:/app/data
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
       REPLICA_ID: 1
@@ -26,7 +26,7 @@ services:
     build:
       context: ./Replicas
     volumes:
-      - ./data/replica2:/app/data
+      - ./data:/app/data
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
       REPLICA_ID: 2
@@ -37,7 +37,7 @@ services:
     build:
       context: ./Replicas
     volumes:
-      - ./data/replica3:/app/data
+      - ./data:/app/data
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
       REPLICA_ID: 3
@@ -62,5 +62,44 @@ services:
     - "8082:8082"
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq
+  clientreaderv2:
+    build:
+      context: ./ClientReaderV2
+    ports:
+    - "8083:8082"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq
+  replica1v2:
+    build:
+      context: ./ReplicasV2
+    volumes:
+      - ./data:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 1
+    depends_on:
+      - rabbitmq
+  replica2v2:
+    build:
+      context: ./ReplicasV2
+    volumes:
+      - ./data:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 2
+    depends_on:
+      - rabbitmq
+  replica3v2:
+    build:
+      context: ./ReplicasV2
+    volumes:
+      - ./data:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 3
     depends_on:
       - rabbitmq
