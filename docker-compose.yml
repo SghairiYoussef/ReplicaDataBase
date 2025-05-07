@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  replica1:
+    build:
+      context: ./Replicas
+    volumes:
+      - ./data/replica1:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 1
+    depends_on:
+      - rabbitmq
+
+  replica2:
+    build:
+      context: ./Replicas
+    volumes:
+      - ./data/replica2:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 2
+    depends_on:
+      - rabbitmq
+
+  replica3:
+    build:
+      context: ./Replicas
+    volumes:
+      - ./data/replica3:/app/data
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      REPLICA_ID: 3
+    depends_on:
+      - rabbitmq
+
+  clientwriter:
+    build:
+      context: ./ClientWriter
+    ports:
+    - "8081:8081"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq
+    
+
+  clientreader:
+    build:
+      context: ./ClientReader
+    ports:
+    - "8082:8082"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - rabbitmq

@@ -1,5 +1,13 @@
 server:
   port: 8080
+spring:
+  application:
+    name: replicas
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: password
 
 replica:
   id: ${REPLICA_ID}
